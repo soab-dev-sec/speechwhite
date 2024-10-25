@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Speech Recognition and Synthesis</title>
+</head>
+<body>
+    <button id="click_to_convert">Start Recognition</button>
+    <button id="Lire">Read Text</button>
+    <textarea id="convert_text"></textarea>
+
+    <script>
+        document.getElementById('click_to_convert').addEventListener('click', function() {
+            window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.interimResults = true;
+
+            recognition.addEventListener('result', e => {
+                const transcript = Array.from(e.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join('');
+                document.getElementById('convert_text').innerHTML = transcript;
+            });
+
+            recognition.start();
+        });
+
+        let speech = new SpeechSynthesisUtterance();
+        document.getElementById('Lire').addEventListener('click', () => {
+            speech.text = document.getElementById('convert_text').value;
+            window.speechSynthesis.speak(speech);
+        });
+    </script>
+</body>
+</html>
